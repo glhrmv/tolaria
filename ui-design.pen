@@ -582,87 +582,6 @@
                     },
                     {
                       "type": "frame",
-                      "id": "GCjh0",
-                      "name": "expGroup",
-                      "width": "fill_container",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": {
-                          "bottom": 1
-                        },
-                        "fill": {
-                          "type": "color",
-                          "color": "$--border",
-                          "enabled": false
-                        }
-                      },
-                      "layout": "vertical",
-                      "gap": 2,
-                      "padding": [
-                        4,
-                        6
-                      ],
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "5Wpyd",
-                          "name": "expHeader",
-                          "width": "fill_container",
-                          "cornerRadius": 4,
-                          "gap": 8,
-                          "padding": [
-                            6,
-                            16
-                          ],
-                          "justifyContent": "space_between",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "DZD8y",
-                              "name": "leftExp",
-                              "gap": 8,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "icon_font",
-                                  "id": "sguhh",
-                                  "name": "expIcon",
-                                  "width": 18,
-                                  "height": 18,
-                                  "iconFontName": "flask",
-                                  "iconFontFamily": "phosphor",
-                                  "weight": 700,
-                                  "fill": "$--accent-red"
-                                },
-                                {
-                                  "type": "text",
-                                  "id": "AzhC3",
-                                  "name": "expLabel",
-                                  "fill": "$--foreground",
-                                  "content": "Experiments",
-                                  "fontFamily": "Inter",
-                                  "fontSize": 13,
-                                  "fontWeight": "500"
-                                }
-                              ]
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "ijaoq",
-                              "name": "expChev",
-                              "width": 14,
-                              "height": 14,
-                              "iconFontName": "chevron-right",
-                              "iconFontFamily": "lucide",
-                              "fill": "$--muted-foreground"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
                       "id": "WAQtn",
                       "name": "respGroup",
                       "width": "fill_container",
@@ -1144,6 +1063,56 @@
                               "fill": "$--muted-foreground"
                             }
                           ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "2cQBp",
+                          "name": "eventsHeader",
+                          "width": "fill_container",
+                          "cornerRadius": 4,
+                          "gap": 8,
+                          "padding": [
+                            6,
+                            16
+                          ],
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "0f10v",
+                              "name": "leftEvents",
+                              "gap": 8,
+                              "padding": [
+                                8,
+                                0
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "xBv1X",
+                                  "name": "eventsIcon",
+                                  "width": 18,
+                                  "height": 18,
+                                  "iconFontName": "plus",
+                                  "iconFontFamily": "phosphor",
+                                  "weight": 700,
+                                  "fill": "$--muted-foreground"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "viWPL",
+                                  "name": "eventsLbl",
+                                  "fill": "$--muted-foreground",
+                                  "content": "Create new type",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 13,
+                                  "fontWeight": "500"
+                                }
+                              ]
+                            }
+                          ]
                         }
                       ]
                     }
@@ -1279,7 +1248,7 @@
                       "id": "hmbdb",
                       "name": "nlTitle",
                       "fill": "$--foreground",
-                      "content": "Notes",
+                      "content": "Laputa App",
                       "fontFamily": "Inter",
                       "fontSize": 14,
                       "fontWeight": "600"
@@ -1326,75 +1295,99 @@
                   "children": [
                     {
                       "type": "frame",
-                      "id": "tMsM4",
-                      "name": "Note Item Selected",
+                      "id": "y9y05",
+                      "name": "Backlinks Group",
                       "width": "fill_container",
-                      "fill": "$--accent-red-light",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": {
-                          "bottom": 1
-                        },
-                        "fill": "#E9E9E7"
-                      },
+                      "layout": "vertical",
                       "children": [
                         {
-                          "type": "rectangle",
-                          "id": "npYuc",
-                          "name": "leftAccent",
-                          "fill": "$--accent-red",
-                          "width": 3,
-                          "height": "fill_container"
-                        },
-                        {
                           "type": "frame",
-                          "id": "a33Wx",
-                          "name": "noteSelContent",
+                          "id": "tMsM4",
+                          "name": "Note Item Selected",
                           "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 4,
-                          "padding": [
-                            14,
-                            16
-                          ],
+                          "fill": "$--accent-red-light",
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": {
+                              "bottom": 1
+                            },
+                            "fill": "#E9E9E7"
+                          },
                           "children": [
                             {
+                              "type": "rectangle",
+                              "id": "npYuc",
+                              "name": "leftAccent",
+                              "fill": "$--accent-red",
+                              "width": 3,
+                              "height": "fill_container"
+                            },
+                            {
                               "type": "frame",
-                              "id": "AZkyx",
-                              "name": "noteSelRow",
+                              "id": "a33Wx",
+                              "name": "noteSelContent",
                               "width": "fill_container",
-                              "gap": 8,
-                              "justifyContent": "space_between",
-                              "alignItems": "center",
+                              "layout": "vertical",
+                              "gap": 4,
+                              "padding": [
+                                14,
+                                16
+                              ],
                               "children": [
                                 {
                                   "type": "frame",
-                                  "id": "j7GDJ",
-                                  "name": "titleGroup",
-                                  "gap": 6,
+                                  "id": "AZkyx",
+                                  "name": "noteSelRow",
+                                  "width": "fill_container",
+                                  "gap": 8,
+                                  "justifyContent": "space_between",
                                   "alignItems": "center",
                                   "children": [
                                     {
-                                      "type": "icon_font",
-                                      "id": "BnkTG",
-                                      "name": "ico",
-                                      "width": 14,
-                                      "height": 14,
-                                      "iconFontName": "wrench",
-                                      "iconFontFamily": "lucide",
-                                      "fill": "$--accent-red"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "j7o2Q",
-                                      "name": "noteSelTitle",
-                                      "fill": "$--foreground",
-                                      "content": "Laputa App",
-                                      "fontFamily": "Inter",
-                                      "fontSize": 13,
-                                      "fontWeight": "600"
+                                      "type": "frame",
+                                      "id": "j7GDJ",
+                                      "name": "titleGroup",
+                                      "width": "fill_container",
+                                      "gap": 6,
+                                      "justifyContent": "space_between",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "j7o2Q",
+                                          "name": "noteSelTitle",
+                                          "fill": "$--foreground",
+                                          "content": "Laputa App",
+                                          "fontFamily": "Inter",
+                                          "fontSize": 13,
+                                          "fontWeight": "600"
+                                        },
+                                        {
+                                          "type": "icon_font",
+                                          "id": "BnkTG",
+                                          "name": "ico",
+                                          "width": 14,
+                                          "height": 14,
+                                          "iconFontName": "wrench",
+                                          "iconFontFamily": "lucide",
+                                          "fill": "$--accent-red"
+                                        }
+                                      ]
                                     }
                                   ]
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "Ac5Ds",
+                                  "name": "noteSelSnip",
+                                  "fill": "$--foreground",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Personal knowledge and life management desktop app...",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 12,
+                                  "fontWeight": "normal"
                                 },
                                 {
                                   "type": "text",
@@ -1407,19 +1400,6 @@
                                   "fontWeight": "normal"
                                 }
                               ]
-                            },
-                            {
-                              "type": "text",
-                              "id": "Ac5Ds",
-                              "name": "noteSelSnip",
-                              "fill": "$--foreground",
-                              "textGrowth": "fixed-width",
-                              "width": "fill_container",
-                              "content": "Personal knowledge and life management desktop app...",
-                              "lineHeight": 1.5,
-                              "fontFamily": "Inter",
-                              "fontSize": 12,
-                              "fontWeight": "normal"
                             }
                           ]
                         }
@@ -1427,60 +1407,167 @@
                     },
                     {
                       "type": "frame",
-                      "id": "AsAKG",
-                      "name": "Note Item",
+                      "id": "7G8pN",
+                      "name": "Related Notes Group",
                       "width": "fill_container",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": {
-                          "bottom": 1
-                        },
-                        "fill": "$--border"
-                      },
                       "layout": "vertical",
-                      "gap": 4,
-                      "padding": [
-                        14,
-                        16
-                      ],
                       "children": [
                         {
                           "type": "frame",
-                          "id": "QX5A1",
-                          "name": "note2Row",
+                          "id": "fDxtF",
+                          "name": "Related Notes Header",
                           "width": "fill_container",
-                          "gap": 8,
+                          "height": 32,
+                          "fill": "$--muted",
+                          "padding": [
+                            0,
+                            16
+                          ],
                           "justifyContent": "space_between",
                           "alignItems": "center",
                           "children": [
                             {
                               "type": "frame",
-                              "id": "rYdta",
-                              "name": "leafGroup",
+                              "id": "UBRdO",
+                              "name": "rnLeft",
                               "gap": 6,
                               "alignItems": "center",
                               "children": [
                                 {
-                                  "type": "icon_font",
-                                  "id": "oI64Y",
-                                  "name": "leafIco",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "leaf",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$--accent-green"
+                                  "type": "text",
+                                  "id": "8Z4Wq",
+                                  "name": "rnLabel",
+                                  "fill": "$--muted-foreground",
+                                  "content": "RELATED NOTES",
+                                  "fontFamily": "IBM Plex Mono",
+                                  "fontSize": 11
                                 },
                                 {
                                   "type": "text",
-                                  "id": "PC9XN",
-                                  "name": "note2Title",
-                                  "fill": "$--foreground",
-                                  "content": "Portfolio Rewrite",
-                                  "fontFamily": "Inter",
-                                  "fontSize": 13,
-                                  "fontWeight": "500"
+                                  "id": "vpnZr",
+                                  "name": "rnCount",
+                                  "fill": "$--muted-foreground",
+                                  "content": "2",
+                                  "fontFamily": "IBM Plex Mono",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
                                 }
                               ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "X9LIR",
+                              "name": "rnRight",
+                              "gap": 10,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "fzVWu",
+                                  "name": "rnFilter",
+                                  "width": 12,
+                                  "height": 12,
+                                  "iconFontName": "funnel",
+                                  "iconFontFamily": "phosphor",
+                                  "fill": "$--muted-foreground"
+                                },
+                                {
+                                  "type": "icon_font",
+                                  "id": "wuqsO",
+                                  "name": "rnPlus",
+                                  "width": 12,
+                                  "height": 12,
+                                  "iconFontName": "plus",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "$--muted-foreground"
+                                },
+                                {
+                                  "type": "icon_font",
+                                  "id": "SbjLq",
+                                  "name": "rnChev",
+                                  "width": 12,
+                                  "height": 12,
+                                  "iconFontName": "chevron-down",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "$--muted-foreground"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "AsAKG",
+                          "name": "Note Item",
+                          "width": "fill_container",
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": {
+                              "bottom": 1
+                            },
+                            "fill": "$--border"
+                          },
+                          "layout": "vertical",
+                          "gap": 4,
+                          "padding": [
+                            14,
+                            16
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "QX5A1",
+                              "name": "note2Row",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "justifyContent": "space_between",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "rYdta",
+                                  "name": "leafGroup",
+                                  "width": "fill_container",
+                                  "gap": 6,
+                                  "justifyContent": "space_between",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "PC9XN",
+                                      "name": "note2Title",
+                                      "fill": "$--foreground",
+                                      "content": "Portfolio Rewrite",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 13,
+                                      "fontWeight": "500"
+                                    },
+                                    {
+                                      "type": "icon_font",
+                                      "id": "oI64Y",
+                                      "name": "leafIco",
+                                      "width": 14,
+                                      "height": 14,
+                                      "iconFontName": "leaf",
+                                      "iconFontFamily": "phosphor",
+                                      "fill": "$--accent-green"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "S9JPj",
+                              "name": "note2Snip",
+                              "fill": "$--muted-foreground",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Redesigning portfolio site with modern stack and updated visual language...",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
                             },
                             {
                               "type": "text",
@@ -1495,83 +1582,263 @@
                           ]
                         },
                         {
-                          "type": "text",
-                          "id": "S9JPj",
-                          "name": "note2Snip",
-                          "fill": "$--muted-foreground",
-                          "textGrowth": "fixed-width",
+                          "type": "frame",
+                          "id": "u6E6Z",
+                          "name": "Note Item",
                           "width": "fill_container",
-                          "content": "Redesigning portfolio site with modern stack and updated visual language...",
-                          "lineHeight": 1.5,
-                          "fontFamily": "Inter",
-                          "fontSize": 12,
-                          "fontWeight": "normal"
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": {
+                              "bottom": 1
+                            },
+                            "fill": "$--border"
+                          },
+                          "layout": "vertical",
+                          "gap": 4,
+                          "padding": [
+                            14,
+                            16
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "ZjCz3",
+                              "name": "note2Row",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "justifyContent": "space_between",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "mxCzu",
+                                  "name": "leafGroup",
+                                  "width": "fill_container",
+                                  "gap": 6,
+                                  "justifyContent": "space_between",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "INenY",
+                                      "name": "note2Title",
+                                      "fill": "$--foreground",
+                                      "content": "Sample note 2",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 13,
+                                      "fontWeight": "500"
+                                    },
+                                    {
+                                      "type": "icon_font",
+                                      "id": "gz6qS",
+                                      "name": "leafIco",
+                                      "width": 14,
+                                      "height": 14,
+                                      "iconFontName": "leaf",
+                                      "iconFontFamily": "phosphor",
+                                      "fill": "$--accent-green"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "s141z",
+                              "name": "note2Snip",
+                              "fill": "$--muted-foreground",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Lorem ipsum dolor sit amet consequetur with modern stack and updated language...",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "SvGnt",
+                              "name": "note2Time",
+                              "fill": "$--muted-foreground",
+                              "content": "1h ago",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
                         }
                       ]
                     },
                     {
                       "type": "frame",
-                      "id": "k7CjA",
-                      "name": "Note Item 2",
+                      "id": "1GwHB",
+                      "name": "Events Group",
                       "width": "fill_container",
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": {
-                          "bottom": 1
-                        },
-                        "fill": "$--border"
-                      },
                       "layout": "vertical",
-                      "gap": 4,
-                      "padding": [
-                        14,
-                        16
-                      ],
                       "children": [
                         {
                           "type": "frame",
-                          "id": "og5Gz",
-                          "name": "note3Row",
+                          "id": "fp4xI",
+                          "name": "Events Header",
                           "width": "fill_container",
-                          "gap": 8,
+                          "height": 32,
+                          "fill": "$--muted",
+                          "padding": [
+                            0,
+                            16
+                          ],
                           "justifyContent": "space_between",
                           "alignItems": "center",
                           "children": [
                             {
                               "type": "frame",
-                              "id": "ttBdk",
-                              "name": "calGroup",
+                              "id": "MNNuU",
+                              "name": "evLeft",
                               "gap": 6,
                               "alignItems": "center",
                               "children": [
                                 {
-                                  "type": "icon_font",
-                                  "id": "LdRjU",
-                                  "name": "calIco",
-                                  "width": 14,
-                                  "height": 14,
-                                  "iconFontName": "calendar",
-                                  "iconFontFamily": "lucide",
-                                  "fill": "$--accent-yellow"
+                                  "type": "text",
+                                  "id": "BNxZp",
+                                  "name": "evLabel",
+                                  "fill": "$--muted-foreground",
+                                  "content": "EVENTS",
+                                  "fontFamily": "IBM Plex Mono",
+                                  "fontSize": 11
                                 },
                                 {
                                   "type": "text",
-                                  "id": "KI8Bf",
-                                  "name": "note3Title",
-                                  "fill": "$--foreground",
-                                  "content": "Meeting with Grant",
-                                  "fontFamily": "Inter",
-                                  "fontSize": 13,
-                                  "fontWeight": "500"
+                                  "id": "qcEvw",
+                                  "name": "evCount",
+                                  "fill": "$--muted-foreground",
+                                  "content": "2",
+                                  "fontFamily": "IBM Plex Sans",
+                                  "fontSize": 11,
+                                  "fontWeight": "normal"
                                 }
                               ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "WCyfc",
+                              "name": "evRight",
+                              "gap": 10,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "SpCoO",
+                                  "name": "evFilter",
+                                  "width": 12,
+                                  "height": 12,
+                                  "iconFontName": "funnel",
+                                  "iconFontFamily": "phosphor",
+                                  "fill": "$--muted-foreground"
+                                },
+                                {
+                                  "type": "icon_font",
+                                  "id": "G1DCl",
+                                  "name": "evPlus",
+                                  "width": 12,
+                                  "height": 12,
+                                  "iconFontName": "plus",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "$--muted-foreground"
+                                },
+                                {
+                                  "type": "icon_font",
+                                  "id": "sAalN",
+                                  "name": "evChev",
+                                  "width": 12,
+                                  "height": 12,
+                                  "iconFontName": "chevron-down",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "$--muted-foreground"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "k7CjA",
+                          "name": "Note Item 2",
+                          "width": "fill_container",
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": {
+                              "bottom": 1
+                            },
+                            "fill": "$--border"
+                          },
+                          "layout": "vertical",
+                          "gap": 4,
+                          "padding": [
+                            14,
+                            16
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "og5Gz",
+                              "name": "note3Row",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "justifyContent": "space_between",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "ttBdk",
+                                  "name": "calGroup",
+                                  "width": "fill_container",
+                                  "gap": 6,
+                                  "justifyContent": "space_between",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "KI8Bf",
+                                      "name": "note3Title",
+                                      "fill": "$--foreground",
+                                      "content": "Meeting with Grant",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 13,
+                                      "fontWeight": "500"
+                                    },
+                                    {
+                                      "type": "icon_font",
+                                      "id": "LdRjU",
+                                      "name": "calIco",
+                                      "width": 14,
+                                      "height": 14,
+                                      "iconFontName": "calendar",
+                                      "iconFontFamily": "lucide",
+                                      "fill": "$--accent-yellow"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "FfPXa",
+                              "name": "note3Snip",
+                              "fill": "$--muted-foreground",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Discussed Q1 goals and hiring priorities with the engineering team leads...",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
                             },
                             {
                               "type": "text",
                               "id": "BHh4Z",
                               "name": "note3Time",
                               "fill": "$--muted-foreground",
-                              "content": "3h ago",
+                              "content": "Yesterday",
                               "fontFamily": "Inter",
                               "fontSize": 11,
                               "fontWeight": "normal"
@@ -1579,17 +1846,90 @@
                           ]
                         },
                         {
-                          "type": "text",
-                          "id": "FfPXa",
-                          "name": "note3Snip",
-                          "fill": "$--muted-foreground",
-                          "textGrowth": "fixed-width",
+                          "type": "frame",
+                          "id": "AQ51u",
+                          "name": "Note Item 2",
                           "width": "fill_container",
-                          "content": "Discussed Q1 goals and hiring priorities with the engineering team leads...",
-                          "lineHeight": 1.5,
-                          "fontFamily": "Inter",
-                          "fontSize": 12,
-                          "fontWeight": "normal"
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": {
+                              "bottom": 1
+                            },
+                            "fill": "$--border"
+                          },
+                          "layout": "vertical",
+                          "gap": 4,
+                          "padding": [
+                            14,
+                            16
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "SHgK3",
+                              "name": "note3Row",
+                              "width": "fill_container",
+                              "gap": 8,
+                              "justifyContent": "space_between",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "3rIet",
+                                  "name": "calGroup",
+                                  "width": "fill_container",
+                                  "gap": 6,
+                                  "justifyContent": "space_between",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "dCwzu",
+                                      "name": "note3Title",
+                                      "fill": "$--foreground",
+                                      "content": "Meeting with Matteo",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 13,
+                                      "fontWeight": "500"
+                                    },
+                                    {
+                                      "type": "icon_font",
+                                      "id": "l8O2I",
+                                      "name": "calIco",
+                                      "width": 14,
+                                      "height": 14,
+                                      "iconFontName": "calendar",
+                                      "iconFontFamily": "lucide",
+                                      "fill": "$--accent-yellow"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "1L4oo",
+                              "name": "note3Snip",
+                              "fill": "$--muted-foreground",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Discussed Q1 goals and hiring priorities with the engineering team leads...",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "3oBam",
+                              "name": "note3Time",
+                              "fill": "$--muted-foreground",
+                              "content": "Yesterday",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
                         }
                       ]
                     }
@@ -1976,17 +2316,6 @@
                           "children": [
                             {
                               "type": "text",
-                              "id": "aDL4D",
-                              "name": "editorH1",
-                              "fill": "$--foreground",
-                              "content": "Laputa App",
-                              "lineHeight": 1.2,
-                              "fontFamily": "Inter",
-                              "fontSize": 32,
-                              "fontWeight": "700"
-                            },
-                            {
-                              "type": "text",
                               "id": "b6up3",
                               "name": "editorP1",
                               "fill": "$--foreground",
@@ -2126,6 +2455,36 @@
                               "children": [
                                 {
                                   "type": "frame",
+                                  "id": "VhH4P",
+                                  "name": "addPropBtn",
+                                  "width": "fill_container",
+                                  "cornerRadius": 6,
+                                  "stroke": {
+                                    "align": "inside",
+                                    "thickness": 1,
+                                    "fill": "$--border"
+                                  },
+                                  "padding": [
+                                    6,
+                                    12
+                                  ],
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "Q9z8F",
+                                      "name": "addPropTxt",
+                                      "fill": "$--muted-foreground",
+                                      "content": "+ Add property",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 12,
+                                      "fontWeight": "normal"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
                                   "id": "6PwTH",
                                   "name": "propType",
                                   "width": "fill_container",
@@ -2137,9 +2496,9 @@
                                       "id": "Vt2BC",
                                       "name": "propTypeLbl",
                                       "fill": "$--muted-foreground",
-                                      "content": "Type",
-                                      "fontFamily": "Inter",
-                                      "fontSize": 12,
+                                      "content": "TYPE",
+                                      "fontFamily": "IBM Plex Mono",
+                                      "fontSize": 10,
                                       "fontWeight": "normal"
                                     },
                                     {
@@ -2167,9 +2526,9 @@
                                       "id": "e426F",
                                       "name": "propStatusLbl",
                                       "fill": "$--muted-foreground",
-                                      "content": "Status",
-                                      "fontFamily": "Inter",
-                                      "fontSize": 12,
+                                      "content": "STATUS",
+                                      "fontFamily": "IBM Plex Mono",
+                                      "fontSize": 10,
                                       "fontWeight": "normal"
                                     },
                                     {
@@ -2208,36 +2567,6 @@
                                       ]
                                     }
                                   ]
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "VhH4P",
-                                  "name": "addPropBtn",
-                                  "width": "fill_container",
-                                  "cornerRadius": 6,
-                                  "stroke": {
-                                    "align": "inside",
-                                    "thickness": 1,
-                                    "fill": "$--border"
-                                  },
-                                  "padding": [
-                                    6,
-                                    12
-                                  ],
-                                  "justifyContent": "center",
-                                  "alignItems": "center",
-                                  "children": [
-                                    {
-                                      "type": "text",
-                                      "id": "Q9z8F",
-                                      "name": "addPropTxt",
-                                      "fill": "$--muted-foreground",
-                                      "content": "+ Add property",
-                                      "fontFamily": "Inter",
-                                      "fontSize": 12,
-                                      "fontWeight": "normal"
-                                    }
-                                  ]
                                 }
                               ]
                             },
@@ -2247,7 +2576,7 @@
                               "name": "Relationships Section",
                               "width": "fill_container",
                               "layout": "vertical",
-                              "gap": 8,
+                              "gap": 16,
                               "children": [
                                 {
                                   "type": "frame",
@@ -2261,18 +2590,17 @@
                                       "type": "text",
                                       "id": "0N729",
                                       "name": "relGrp1Title",
-                                      "fill": "$--foreground",
-                                      "content": "Belongs To",
-                                      "fontFamily": "Inter",
-                                      "fontSize": 12,
-                                      "fontWeight": "600"
+                                      "fill": "$--muted-foreground",
+                                      "content": "BELONGS TO",
+                                      "fontFamily": "IBM Plex Mono",
+                                      "fontSize": 10
                                     },
                                     {
                                       "type": "frame",
                                       "id": "zLl8F",
                                       "name": "relLaputaBtn",
                                       "width": "fill_container",
-                                      "fill": "$--accent-blue-light",
+                                      "fill": "$--accent-green-light",
                                       "cornerRadius": 6,
                                       "padding": [
                                         6,
@@ -2285,7 +2613,7 @@
                                           "type": "text",
                                           "id": "kw9vC",
                                           "name": "laputaTxt",
-                                          "fill": "$--primary",
+                                          "fill": "$--accent-green",
                                           "content": "Laputa",
                                           "fontFamily": "Inter",
                                           "fontSize": 12,
@@ -2300,7 +2628,44 @@
                                           "height": 14,
                                           "iconFontName": "tag",
                                           "iconFontFamily": "phosphor",
-                                          "fill": "$--primary"
+                                          "fill": "$--accent-green"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "type": "frame",
+                                      "id": "ybi8Q",
+                                      "name": "relLaputaBtn",
+                                      "width": "fill_container",
+                                      "fill": "$--accent-green-light",
+                                      "cornerRadius": 6,
+                                      "padding": [
+                                        6,
+                                        10
+                                      ],
+                                      "justifyContent": "space_between",
+                                      "alignItems": "center",
+                                      "children": [
+                                        {
+                                          "type": "text",
+                                          "id": "VNcmt",
+                                          "name": "laputaTxt",
+                                          "fill": "$--accent-green",
+                                          "content": "Building",
+                                          "fontFamily": "Inter",
+                                          "fontSize": 12,
+                                          "fontWeight": "500"
+                                        },
+                                        {
+                                          "type": "icon_font",
+                                          "id": "UVPwc",
+                                          "name": "topicIcon",
+                                          "opacity": 0.5,
+                                          "width": 14,
+                                          "height": 14,
+                                          "iconFontName": "tag",
+                                          "iconFontFamily": "phosphor",
+                                          "fill": "$--accent-green"
                                         }
                                       ]
                                     },
@@ -2348,18 +2713,17 @@
                                       "type": "text",
                                       "id": "LOXUL",
                                       "name": "relGrp2Title",
-                                      "fill": "$--foreground",
-                                      "content": "Related To",
-                                      "fontFamily": "Inter",
-                                      "fontSize": 12,
-                                      "fontWeight": "600"
+                                      "fill": "$--muted-foreground",
+                                      "content": "RELATED TO",
+                                      "fontFamily": "IBM Plex Mono",
+                                      "fontSize": 10
                                     },
                                     {
                                       "type": "frame",
                                       "id": "qLTYD",
                                       "name": "relMigrationBtn",
                                       "width": "fill_container",
-                                      "fill": "$--accent-blue-light",
+                                      "fill": "$--accent-red-light",
                                       "cornerRadius": 6,
                                       "padding": [
                                         6,
@@ -2372,7 +2736,7 @@
                                           "type": "text",
                                           "id": "GBk2u",
                                           "name": "migrationTxt",
-                                          "fill": "$--primary",
+                                          "fill": "$--accent-red",
                                           "content": "Shadcn Migration",
                                           "fontFamily": "Inter",
                                           "fontSize": 12,
@@ -2387,7 +2751,7 @@
                                           "height": 14,
                                           "iconFontName": "flask",
                                           "iconFontFamily": "phosphor",
-                                          "fill": "$--primary"
+                                          "fill": "$--accent-red"
                                         }
                                       ]
                                     },
@@ -2444,21 +2808,11 @@
                                       "type": "text",
                                       "id": "ZbgbI",
                                       "name": "blTitleTxt",
-                                      "fill": "$--foreground",
-                                      "content": "Backlinks",
-                                      "fontFamily": "Inter",
-                                      "fontSize": 12,
-                                      "fontWeight": "600"
-                                    },
-                                    {
-                                      "type": "text",
-                                      "id": "TKnTR",
-                                      "name": "blCount",
+                                      "rotation": -0.5285936385085725,
                                       "fill": "$--muted-foreground",
-                                      "content": "3",
-                                      "fontFamily": "Inter",
-                                      "fontSize": 11,
-                                      "fontWeight": "500"
+                                      "content": "BACKLINKS",
+                                      "fontFamily": "IBM Plex Mono",
+                                      "fontSize": 10
                                     }
                                   ]
                                 },
@@ -2506,11 +2860,10 @@
                                   "type": "text",
                                   "id": "dG7rj",
                                   "name": "histTitle",
-                                  "fill": "$--foreground",
-                                  "content": "History",
-                                  "fontFamily": "Inter",
-                                  "fontSize": 12,
-                                  "fontWeight": "600"
+                                  "fill": "$--muted-foreground",
+                                  "content": "HISTORY",
+                                  "fontFamily": "IBM Plex Mono",
+                                  "fontSize": 10
                                 },
                                 {
                                   "type": "frame",
@@ -2537,7 +2890,7 @@
                                       "type": "text",
                                       "id": "AsiWz",
                                       "name": "histItem1Hash",
-                                      "fill": "$--foreground",
+                                      "fill": "$--accent-blue",
                                       "content": "a089f44 · feat: migrate to shadcn/ui",
                                       "fontFamily": "Inter",
                                       "fontSize": 11,
@@ -2580,7 +2933,7 @@
                                       "type": "text",
                                       "id": "0PWoX",
                                       "name": "histItem2Hash",
-                                      "fill": "$--foreground",
+                                      "fill": "$--accent-blue",
                                       "content": "5a4b4ac · feat: emoji favicon",
                                       "fontFamily": "Inter",
                                       "fontSize": 11,
@@ -5038,5 +5391,11 @@
         }
       ]
     }
-  }
+  },
+  "fonts": [
+    {
+      "name": "GT Pressura Trial",
+      "url": "GT-Pressura-Regular-Trial.otf"
+    }
+  ]
 }
