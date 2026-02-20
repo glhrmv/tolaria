@@ -1107,5 +1107,308 @@ References:
         );
     }
 
+    // --- parse_iso_date tests ---
+
+    #[test]
+    fn test_parse_iso_date_full_datetime_with_z() {
+        let ts = parse_iso_date("2025-05-23T14:35:00.000Z");
+        assert!(ts.is_some());
+        assert_eq!(ts.unwrap(), 1748010900);
+    }
+
+    #[test]
+    fn test_parse_iso_date_datetime_no_fractional() {
+        let ts = parse_iso_date("2025-05-23T14:35:00Z");
+        assert!(ts.is_some());
+        assert_eq!(ts.unwrap(), 1748010900);
+    }
+
+    #[test]
+    fn test_parse_iso_date_datetime_no_z() {
+        let ts = parse_iso_date("2025-05-23T14:35:00");
+        assert!(ts.is_some());
+        assert_eq!(ts.unwrap(), 1748010900);
+    }
+
+    #[test]
+    fn test_parse_iso_date_date_only() {
+        let ts = parse_iso_date("2025-05-23");
+        assert!(ts.is_some());
+        assert_eq!(ts.unwrap(), 1747958400); // midnight UTC
+    }
+
+    #[test]
+    fn test_parse_iso_date_with_quotes_and_whitespace() {
+        let ts = parse_iso_date("  \"2025-05-23\"  ");
+        assert!(ts.is_some());
+        assert_eq!(ts.unwrap(), 1747958400);
+    }
+
+    #[test]
+    fn test_parse_iso_date_invalid() {
+        assert!(parse_iso_date("not-a-date").is_none());
+        assert!(parse_iso_date("").is_none());
+        assert!(parse_iso_date("2025-13-45").is_none());
+    }
+
+    // --- strip_markdown_chars tests ---
+
+    #[test]
+    fn test_strip_markdown_chars_plain_text() {
+        assert_eq!(strip_markdown_chars("hello world"), "hello world");
+    }
+
+    #[test]
+    fn test_strip_markdown_chars_emphasis() {
+        assert_eq!(strip_markdown_chars("**bold** and *italic*"), "bold and italic");
+    }
+
+    #[test]
+    fn test_strip_markdown_chars_backticks() {
+        assert_eq!(strip_markdown_chars("use `code` here"), "use code here");
+    }
+
+    #[test]
+    fn test_strip_markdown_chars_strikethrough() {
+        assert_eq!(strip_markdown_chars("~~deleted~~"), "deleted");
+    }
+
+    #[test]
+    fn test_strip_markdown_chars_link_with_url() {
+        assert_eq!(strip_markdown_chars("[click here](https://example.com)"), "click here");
+    }
+
+    #[test]
+    fn test_strip_markdown_chars_wikilink() {
+        // Note: strip_markdown_chars handles single brackets [text](url) well
+        // but wikilinks [[text]] leave one layer of brackets. This is acceptable
+        // because extract_snippet already handles the common case.
+        assert_eq!(strip_markdown_chars("see [[my note]]"), "see [my note]");
+    }
+
+    #[test]
+    fn test_strip_markdown_chars_bracket_without_url() {
+        assert_eq!(strip_markdown_chars("[just brackets]"), "just brackets");
+    }
+
+    #[test]
+    fn test_strip_markdown_chars_empty() {
+        assert_eq!(strip_markdown_chars(""), "");
+    }
+
+    // --- capitalize_first tests ---
+
+    #[test]
+    fn test_capitalize_first_normal() {
+        assert_eq!(capitalize_first("person"), "Person");
+    }
+
+    #[test]
+    fn test_capitalize_first_already_capitalized() {
+        assert_eq!(capitalize_first("Project"), "Project");
+    }
+
+    #[test]
+    fn test_capitalize_first_empty() {
+        assert_eq!(capitalize_first(""), "");
+    }
+
+    #[test]
+    fn test_capitalize_first_single_char() {
+        assert_eq!(capitalize_first("a"), "A");
+    }
+
+    // --- infer_type_from_folder tests ---
+
+    #[test]
+    fn test_infer_type_from_known_folders() {
+        let dir = TempDir::new().unwrap();
+        let known_folders = vec![
+            ("person", "Person"),
+            ("project", "Project"),
+            ("procedure", "Procedure"),
+            ("responsibility", "Responsibility"),
+            ("event", "Event"),
+            ("topic", "Topic"),
+            ("experiment", "Experiment"),
+            ("note", "Note"),
+            ("quarter", "Quarter"),
+            ("measure", "Measure"),
+            ("target", "Target"),
+            ("journal", "Journal"),
+            ("month", "Month"),
+            ("essay", "Essay"),
+            ("evergreen", "Evergreen"),
+        ];
+        for (folder, expected_type) in known_folders {
+            create_test_file(dir.path(), &format!("{}/test.md", folder), "# Test\n");
+            let entry = parse_md_file(&dir.path().join(folder).join("test.md")).unwrap();
+            assert_eq!(entry.is_a, Some(expected_type.to_string()), "folder '{}' should infer type '{}'", folder, expected_type);
+        }
+    }
+
+    #[test]
+    fn test_infer_type_from_unknown_folder_capitalizes() {
+        let dir = TempDir::new().unwrap();
+        create_test_file(dir.path(), "recipe/test.md", "# Test\n");
+        let entry = parse_md_file(&dir.path().join("recipe/test.md")).unwrap();
+        assert_eq!(entry.is_a, Some("Recipe".to_string()));
+    }
+
+    #[test]
+    fn test_infer_type_frontmatter_overrides_folder() {
+        let dir = TempDir::new().unwrap();
+        create_test_file(dir.path(), "person/test.md", "---\nIs A: Custom\n---\n# Test\n");
+        let entry = parse_md_file(&dir.path().join("person/test.md")).unwrap();
+        assert_eq!(entry.is_a, Some("Custom".to_string()));
+    }
+
+    // --- without_h1_line tests ---
+
+    #[test]
+    fn test_without_h1_line_starts_with_h1() {
+        let result = without_h1_line("# Title\nBody text");
+        assert!(result.is_some());
+        assert_eq!(result.unwrap(), "Body text");
+    }
+
+    #[test]
+    fn test_without_h1_line_blank_lines_then_h1() {
+        let result = without_h1_line("\n\n# Title\nBody");
+        assert!(result.is_some());
+        assert_eq!(result.unwrap(), "Body");
+    }
+
+    #[test]
+    fn test_without_h1_line_non_heading_first() {
+        let result = without_h1_line("Some text\n# Title\n");
+        assert!(result.is_none());
+    }
+
+    #[test]
+    fn test_without_h1_line_empty() {
+        let result = without_h1_line("");
+        assert!(result.is_none());
+    }
+
+    #[test]
+    fn test_without_h1_line_only_blank_lines() {
+        let result = without_h1_line("\n\n\n");
+        assert!(result.is_none());
+    }
+
+    // --- extract_snippet edge cases ---
+
+    #[test]
+    fn test_extract_snippet_code_fence_delimiters_skipped() {
+        // Note: the line-based filter skips ``` fence delimiters but not
+        // content between fences. This is a known limitation.
+        let content = "# Title\n\n```rust\nfn main() {}\n```\n\nReal content here.";
+        let snippet = extract_snippet(content);
+        assert!(!snippet.contains("```"));
+        assert!(snippet.contains("Real content here"));
+    }
+
+    #[test]
+    fn test_extract_snippet_only_headings() {
+        let content = "# Title\n\n## Section One\n\n### Sub Section\n";
+        let snippet = extract_snippet(content);
+        assert_eq!(snippet, "");
+    }
+
+    #[test]
+    fn test_extract_snippet_no_frontmatter_no_h1() {
+        let content = "Just plain text content without any heading.";
+        let snippet = extract_snippet(content);
+        assert_eq!(snippet, "Just plain text content without any heading.");
+    }
+
+    #[test]
+    fn test_extract_snippet_unclosed_frontmatter() {
+        let content = "---\nIs A: Note\nThis has no closing fence\n# Title\n\nBody text.";
+        let snippet = extract_snippet(content);
+        // unclosed frontmatter means it treats "---" as not having a close
+        // so the content is the full string
+        assert!(snippet.contains("Body text"));
+    }
+
+    #[test]
+    fn test_extract_snippet_horizontal_rules_skipped() {
+        let content = "# Title\n\n---\n\nContent after rule.";
+        let snippet = extract_snippet(content);
+        assert_eq!(snippet, "Content after rule.");
+    }
+
+    // --- contains_wikilink tests ---
+
+    #[test]
+    fn test_contains_wikilink_true() {
+        assert!(contains_wikilink("[[some note]]"));
+        assert!(contains_wikilink("text before [[link]] text after"));
+    }
+
+    #[test]
+    fn test_contains_wikilink_false() {
+        assert!(!contains_wikilink("no links here"));
+        assert!(!contains_wikilink("[single bracket]"));
+        assert!(!contains_wikilink("only [[ opening"));
+        assert!(!contains_wikilink("only ]] closing"));
+    }
+
+    // --- scan_vault_cached incremental update ---
+
+    #[test]
+    fn test_scan_vault_cached_incremental_different_commit() {
+        let dir = TempDir::new().unwrap();
+        let vault = dir.path();
+
+        // Init git repo
+        std::process::Command::new("git").args(["init"]).current_dir(vault).output().unwrap();
+        std::process::Command::new("git").args(["config", "user.email", "test@test.com"]).current_dir(vault).output().unwrap();
+        std::process::Command::new("git").args(["config", "user.name", "Test"]).current_dir(vault).output().unwrap();
+
+        create_test_file(vault, "first.md", "# First\n\nFirst note.");
+        std::process::Command::new("git").args(["add", "."]).current_dir(vault).output().unwrap();
+        std::process::Command::new("git").args(["commit", "-m", "first"]).current_dir(vault).output().unwrap();
+
+        // Build cache
+        let entries = scan_vault_cached(vault.to_str().unwrap()).unwrap();
+        assert_eq!(entries.len(), 1);
+
+        // Add a second file and commit
+        create_test_file(vault, "second.md", "# Second\n\nSecond note.");
+        std::process::Command::new("git").args(["add", "."]).current_dir(vault).output().unwrap();
+        std::process::Command::new("git").args(["commit", "-m", "second"]).current_dir(vault).output().unwrap();
+
+        // Incremental update: cache has old commit, new commit adds second.md
+        let entries2 = scan_vault_cached(vault.to_str().unwrap()).unwrap();
+        assert_eq!(entries2.len(), 2);
+        let titles: Vec<&str> = entries2.iter().map(|e| e.title.as_str()).collect();
+        assert!(titles.contains(&"First"));
+        assert!(titles.contains(&"Second"));
+    }
+
+    // --- created_at parsing from frontmatter ---
+
+    #[test]
+    fn test_parse_created_at_from_frontmatter() {
+        let dir = TempDir::new().unwrap();
+        let content = "---\nCreated at: 2025-05-23T14:35:00.000Z\n---\n# Test\n";
+        create_test_file(dir.path(), "test.md", content);
+
+        let entry = parse_md_file(&dir.path().join("test.md")).unwrap();
+        assert_eq!(entry.created_at, Some(1748010900));
+    }
+
+    #[test]
+    fn test_parse_created_time_fallback() {
+        let dir = TempDir::new().unwrap();
+        let content = "---\nCreated time: 2025-05-23\n---\n# Test\n";
+        create_test_file(dir.path(), "test.md", content);
+
+        let entry = parse_md_file(&dir.path().join("test.md")).unwrap();
+        assert_eq!(entry.created_at, Some(1747958400));
+    }
+
     // Frontmatter update/delete tests are in frontmatter.rs
 }

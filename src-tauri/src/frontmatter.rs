@@ -276,4 +276,240 @@ mod tests {
         assert_eq!(format_yaml_key("Is A"), "\"Is A\"");
         assert_eq!(format_yaml_key("Created at"), "\"Created at\"");
     }
+
+    // --- to_yaml_value quoting tests ---
+
+    #[test]
+    fn test_to_yaml_value_string_needs_quoting_colon() {
+        let v = FrontmatterValue::String("key: value".to_string());
+        assert_eq!(v.to_yaml_value(), "\"key: value\"");
+    }
+
+    #[test]
+    fn test_to_yaml_value_string_needs_quoting_hash() {
+        let v = FrontmatterValue::String("has # comment".to_string());
+        assert_eq!(v.to_yaml_value(), "\"has # comment\"");
+    }
+
+    #[test]
+    fn test_to_yaml_value_string_needs_quoting_bracket() {
+        let v = FrontmatterValue::String("[array-like]".to_string());
+        assert_eq!(v.to_yaml_value(), "\"[array-like]\"");
+    }
+
+    #[test]
+    fn test_to_yaml_value_string_needs_quoting_brace() {
+        let v = FrontmatterValue::String("{object-like}".to_string());
+        assert_eq!(v.to_yaml_value(), "\"{object-like}\"");
+    }
+
+    #[test]
+    fn test_to_yaml_value_string_needs_quoting_bool_like() {
+        assert_eq!(FrontmatterValue::String("true".to_string()).to_yaml_value(), "\"true\"");
+        assert_eq!(FrontmatterValue::String("false".to_string()).to_yaml_value(), "\"false\"");
+    }
+
+    #[test]
+    fn test_to_yaml_value_string_needs_quoting_null_like() {
+        assert_eq!(FrontmatterValue::String("null".to_string()).to_yaml_value(), "\"null\"");
+    }
+
+    #[test]
+    fn test_to_yaml_value_string_needs_quoting_number_like() {
+        assert_eq!(FrontmatterValue::String("42".to_string()).to_yaml_value(), "\"42\"");
+        assert_eq!(FrontmatterValue::String("3.14".to_string()).to_yaml_value(), "\"3.14\"");
+    }
+
+    #[test]
+    fn test_to_yaml_value_string_plain() {
+        let v = FrontmatterValue::String("Hello World".to_string());
+        assert_eq!(v.to_yaml_value(), "Hello World");
+    }
+
+    #[test]
+    fn test_to_yaml_value_number_integer() {
+        let v = FrontmatterValue::Number(42.0);
+        assert_eq!(v.to_yaml_value(), "42");
+    }
+
+    #[test]
+    fn test_to_yaml_value_number_float() {
+        let v = FrontmatterValue::Number(3.14);
+        assert_eq!(v.to_yaml_value(), "3.14");
+    }
+
+    #[test]
+    fn test_to_yaml_value_null() {
+        assert_eq!(FrontmatterValue::Null.to_yaml_value(), "null");
+    }
+
+    #[test]
+    fn test_to_yaml_value_empty_list() {
+        let v = FrontmatterValue::List(vec![]);
+        assert_eq!(v.to_yaml_value(), "[]");
+    }
+
+    #[test]
+    fn test_to_yaml_value_list_with_colon() {
+        let v = FrontmatterValue::List(vec!["key: value".to_string()]);
+        assert_eq!(v.to_yaml_value(), "  - \"key: value\"");
+    }
+
+    // --- update_frontmatter_content additional type tests ---
+
+    #[test]
+    fn test_update_frontmatter_number() {
+        let content = "---\nStatus: Draft\n---\n# Test\n";
+        let updated = update_frontmatter_content(content, "Priority", Some(FrontmatterValue::Number(5.0))).unwrap();
+        assert!(updated.contains("Priority: 5"));
+    }
+
+    #[test]
+    fn test_update_frontmatter_number_float() {
+        let content = "---\nStatus: Draft\n---\n# Test\n";
+        let updated = update_frontmatter_content(content, "Score", Some(FrontmatterValue::Number(9.5))).unwrap();
+        assert!(updated.contains("Score: 9.5"));
+    }
+
+    #[test]
+    fn test_update_frontmatter_null() {
+        let content = "---\nStatus: Draft\n---\n# Test\n";
+        let updated = update_frontmatter_content(content, "ClearMe", Some(FrontmatterValue::Null)).unwrap();
+        assert!(updated.contains("ClearMe: null"));
+    }
+
+    #[test]
+    fn test_update_frontmatter_empty_list() {
+        let content = "---\nStatus: Draft\n---\n# Test\n";
+        let updated = update_frontmatter_content(content, "tags", Some(FrontmatterValue::List(vec![]))).unwrap();
+        assert!(updated.contains("tags: []"));
+    }
+
+    #[test]
+    fn test_update_frontmatter_malformed_no_closing_fence() {
+        let content = "---\nStatus: Draft\nNo closing fence here";
+        let result = update_frontmatter_content(content, "Status", Some(FrontmatterValue::String("Active".to_string())));
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("Malformed frontmatter"));
+    }
+
+    // --- delete non-existent key (should be no-op) ---
+
+    #[test]
+    fn test_delete_nonexistent_key_noop() {
+        let content = "---\nStatus: Draft\n---\n# Test\n";
+        let updated = update_frontmatter_content(content, "NonExistent", None).unwrap();
+        assert_eq!(updated, content);
+    }
+
+    #[test]
+    fn test_delete_from_no_frontmatter_noop() {
+        let content = "# Test\n\nSome content.";
+        let updated = update_frontmatter_content(content, "NonExistent", None).unwrap();
+        assert_eq!(updated, content);
+    }
+
+    // --- line_is_key tests ---
+
+    #[test]
+    fn test_line_is_key_unquoted() {
+        assert!(line_is_key("Status: Draft", "Status"));
+        assert!(!line_is_key("Status: Draft", "Owner"));
+    }
+
+    #[test]
+    fn test_line_is_key_double_quoted() {
+        assert!(line_is_key("\"Is A\": Note", "Is A"));
+        assert!(!line_is_key("\"Is A\": Note", "Status"));
+    }
+
+    #[test]
+    fn test_line_is_key_single_quoted() {
+        assert!(line_is_key("'Is A': Note", "Is A"));
+    }
+
+    #[test]
+    fn test_line_is_key_leading_whitespace() {
+        assert!(line_is_key("  Status: Draft", "Status"));
+    }
+
+    #[test]
+    fn test_line_is_key_partial_match() {
+        // "StatusBar" should not match key "Status"
+        assert!(!line_is_key("StatusBar: value", "Status"));
+    }
+
+    // --- with_frontmatter error cases ---
+
+    #[test]
+    fn test_with_frontmatter_file_not_found() {
+        let result = with_frontmatter("/nonexistent/path/file.md", |c| Ok(c.to_string()));
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("does not exist"));
+    }
+
+    // --- roundtrip tests ---
+
+    #[test]
+    fn test_roundtrip_update_string() {
+        let content = "---\nStatus: Draft\n---\n# Test\n";
+        let updated = update_frontmatter_content(content, "Status", Some(FrontmatterValue::String("Active".to_string()))).unwrap();
+        // Parse back with gray_matter
+        let matter = gray_matter::Matter::<gray_matter::engine::YAML>::new();
+        let parsed = matter.parse(&updated);
+        let data = parsed.data.unwrap();
+        if let gray_matter::Pod::Hash(map) = data {
+            assert_eq!(map.get("Status").unwrap().as_string().unwrap(), "Active");
+        } else {
+            panic!("Expected hash");
+        }
+    }
+
+    #[test]
+    fn test_roundtrip_update_list() {
+        let content = "---\nStatus: Draft\n---\n# Test\n";
+        let updated = update_frontmatter_content(content, "aliases", Some(FrontmatterValue::List(vec!["A".to_string(), "B".to_string()]))).unwrap();
+        let matter = gray_matter::Matter::<gray_matter::engine::YAML>::new();
+        let parsed = matter.parse(&updated);
+        let data = parsed.data.unwrap();
+        if let gray_matter::Pod::Hash(map) = data {
+            let aliases = map.get("aliases").unwrap();
+            if let gray_matter::Pod::Array(arr) = aliases {
+                assert_eq!(arr.len(), 2);
+                assert_eq!(arr[0].as_string().unwrap(), "A");
+                assert_eq!(arr[1].as_string().unwrap(), "B");
+            } else {
+                panic!("Expected array");
+            }
+        } else {
+            panic!("Expected hash");
+        }
+    }
+
+    #[test]
+    fn test_roundtrip_add_then_delete() {
+        let content = "---\nStatus: Draft\n---\n# Test\n";
+        let with_owner = update_frontmatter_content(content, "Owner", Some(FrontmatterValue::String("Luca".to_string()))).unwrap();
+        assert!(with_owner.contains("Owner: Luca"));
+        let without_owner = update_frontmatter_content(&with_owner, "Owner", None).unwrap();
+        assert!(!without_owner.contains("Owner"));
+        assert!(without_owner.contains("Status: Draft"));
+    }
+
+    // --- format_yaml_key additional tests ---
+
+    #[test]
+    fn test_format_yaml_key_with_colon() {
+        assert_eq!(format_yaml_key("key:value"), "\"key:value\"");
+    }
+
+    #[test]
+    fn test_format_yaml_key_with_hash() {
+        assert_eq!(format_yaml_key("has#tag"), "\"has#tag\"");
+    }
+
+    #[test]
+    fn test_format_yaml_key_with_period() {
+        assert_eq!(format_yaml_key("key.name"), "\"key.name\"");
+    }
 }
