@@ -463,51 +463,51 @@ fn cache_path(vault_path: &str) -> std::path::PathBuf {
 }
 
 fn git_head_hash(vault_path: &str) -> Option<String> {
+    run_git(vault_path, &["rev-parse", "HEAD"]).map(|s| s.trim().to_string())
+}
+
+/// Run a git command in the given directory and return stdout if successful.
+fn run_git(vault_path: &str, args: &[&str]) -> Option<String> {
     let output = std::process::Command::new("git")
-        .args(["rev-parse", "HEAD"])
+        .args(args)
         .current_dir(vault_path)
         .output()
         .ok()?;
-    if output.status.success() {
-        Some(String::from_utf8_lossy(&output.stdout).trim().to_string())
-    } else {
-        None
+    if !output.status.success() {
+        return None;
     }
+    Some(String::from_utf8_lossy(&output.stdout).to_string())
+}
+
+/// Parse a git status porcelain line into (status_code, file_path).
+fn parse_porcelain_line(line: &str) -> Option<(&str, String)> {
+    if line.len() < 3 { return None; }
+    Some((&line[..2], line[3..].trim().to_string()))
+}
+
+/// Check if a porcelain status indicates a new/untracked file.
+fn is_new_file_status(status: &str) -> bool {
+    status == "??" || status.starts_with('A')
 }
 
 fn git_changed_files(vault_path: &str, from_hash: &str, to_hash: &str) -> Vec<String> {
     let mut files = Vec::new();
 
     // Files changed between commits
-    if let Ok(output) = std::process::Command::new("git")
-        .args(["diff", &format!("{}..{}", from_hash, to_hash), "--name-only"])
-        .current_dir(vault_path)
-        .output()
-    {
-        if output.status.success() {
-            let stdout = String::from_utf8_lossy(&output.stdout);
-            for line in stdout.lines() {
-                if !line.is_empty() && line.ends_with(".md") {
-                    files.push(line.to_string());
-                }
+    if let Some(stdout) = run_git(vault_path, &["diff", &format!("{}..{}", from_hash, to_hash), "--name-only"]) {
+        for line in stdout.lines() {
+            if !line.is_empty() && line.ends_with(".md") {
+                files.push(line.to_string());
             }
         }
     }
 
     // Uncommitted changes (modified + untracked)
-    if let Ok(output) = std::process::Command::new("git")
-        .args(["status", "--porcelain"])
-        .current_dir(vault_path)
-        .output()
-    {
-        if output.status.success() {
-            let stdout = String::from_utf8_lossy(&output.stdout);
-            for line in stdout.lines() {
-                if line.len() >= 3 {
-                    let path = line[3..].trim().to_string();
-                    if path.ends_with(".md") && !files.contains(&path) {
-                        files.push(path);
-                    }
+    if let Some(stdout) = run_git(vault_path, &["status", "--porcelain"]) {
+        for line in stdout.lines() {
+            if let Some((_, path)) = parse_porcelain_line(line) {
+                if path.ends_with(".md") && !files.contains(&path) {
+                    files.push(path);
                 }
             }
         }
@@ -517,26 +517,15 @@ fn git_changed_files(vault_path: &str, from_hash: &str, to_hash: &str) -> Vec<St
 }
 
 fn git_uncommitted_new_files(vault_path: &str) -> Vec<String> {
-    let mut files = Vec::new();
-    if let Ok(output) = std::process::Command::new("git")
-        .args(["status", "--porcelain"])
-        .current_dir(vault_path)
-        .output()
-    {
-        if output.status.success() {
-            let stdout = String::from_utf8_lossy(&output.stdout);
-            for line in stdout.lines() {
-                if line.len() >= 3 {
-                    let status = &line[..2];
-                    let path = line[3..].trim().to_string();
-                    if path.ends_with(".md") && (status == "??" || status.starts_with('A')) {
-                        files.push(path);
-                    }
-                }
-            }
-        }
-    }
-    files
+    let stdout = match run_git(vault_path, &["status", "--porcelain"]) {
+        Some(s) => s,
+        None => return Vec::new(),
+    };
+    stdout.lines()
+        .filter_map(parse_porcelain_line)
+        .filter(|(status, path)| path.ends_with(".md") && is_new_file_status(status))
+        .map(|(_, path)| path)
+        .collect()
 }
 
 fn load_cache(vault_path: &str) -> Option<VaultCache> {
