@@ -193,7 +193,7 @@ export const Sidebar = memo(function Sidebar({ entries, selection, onSelect, onS
 
   const renderSection = ({ label, type, Icon, customColor }: SectionGroup) => {
     const items = entries.filter((e) => e.isA === type && !e.archived)
-    const isCollapsed = collapsed[type] ?? false
+    const isCollapsed = collapsed[type] ?? true
     const isTopic = type === 'Topic'
     const isTypeSection = type === 'Type'
     const sectionColor = getTypeColor(type, customColor)
