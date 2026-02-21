@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, useState, useRef } from 'react'
 import type { ComponentType, SVGAttributes } from 'react'
 import type { VaultEntry, GitCommit } from '../types'
 import { cn } from '@/lib/utils'
@@ -117,7 +117,19 @@ function RelationshipGroup({ label, refs, entries, onNavigate }: { label: string
   )
 }
 
-function DynamicRelationshipsPanel({ frontmatter, entries, onNavigate }: { frontmatter: ParsedFrontmatter; entries: VaultEntry[]; onNavigate: (target: string) => void }) {
+function DynamicRelationshipsPanel({
+  frontmatter, entries, onNavigate, onAddProperty,
+}: {
+  frontmatter: ParsedFrontmatter
+  entries: VaultEntry[]
+  onNavigate: (target: string) => void
+  onAddProperty?: (key: string, value: FrontmatterValue) => void
+}) {
+  const [showForm, setShowForm] = useState(false)
+  const [relKey, setRelKey] = useState('')
+  const [relTarget, setRelTarget] = useState('')
+  const keyInputRef = useRef<HTMLInputElement>(null)
+
   const relationshipEntries = useMemo(() => {
     return Object.entries(frontmatter)
       .filter(([key, value]) => key !== 'Type' && (RELATIONSHIP_KEYS.has(key) || containsWikilinks(value)))
@@ -130,6 +142,24 @@ function DynamicRelationshipsPanel({ frontmatter, entries, onNavigate }: { front
       .filter(({ refs }) => refs.length > 0)
   }, [frontmatter])
 
+  // All note titles for datalist autocomplete
+  const noteTitles = useMemo(() => entries.map(e => e.title), [entries])
+
+  const handleAdd = useCallback(() => {
+    const key = relKey.trim()
+    const target = relTarget.trim()
+    if (!key || !target || !onAddProperty) return
+    onAddProperty(key, `[[${target}]]`)
+    setRelKey('')
+    setRelTarget('')
+    setShowForm(false)
+  }, [relKey, relTarget, onAddProperty])
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleAdd()
+    else if (e.key === 'Escape') { setShowForm(false); setRelKey(''); setRelTarget('') }
+  }
+
   return (
     <div>
       {relationshipEntries.length === 0 ? (
@@ -139,13 +169,57 @@ function DynamicRelationshipsPanel({ frontmatter, entries, onNavigate }: { front
           <RelationshipGroup key={key} label={key} refs={refs} entries={entries} onNavigate={onNavigate} />
         ))
       )}
-      <button
-        className="mt-2 w-full cursor-not-allowed border border-border bg-transparent text-center text-muted-foreground"
-        style={{ borderRadius: 6, padding: '6px 12px', fontSize: 12, opacity: 0.6 }}
-        disabled title="Coming soon"
-      >
-        + Link existing
-      </button>
+
+      {showForm ? (
+        <div className="mt-2 flex flex-col gap-1.5" onKeyDown={handleKeyDown}>
+          <datalist id="rel-note-titles">
+            {noteTitles.map(t => <option key={t} value={t} />)}
+          </datalist>
+          <input
+            ref={keyInputRef}
+            autoFocus
+            className="w-full border border-border bg-transparent px-2 py-1 text-xs text-foreground"
+            style={{ borderRadius: 4, outline: 'none' }}
+            placeholder="Relationship name (e.g. Has, Related to)"
+            value={relKey}
+            onChange={e => setRelKey(e.target.value)}
+          />
+          <input
+            className="w-full border border-border bg-transparent px-2 py-1 text-xs text-foreground"
+            style={{ borderRadius: 4, outline: 'none' }}
+            placeholder="Note title"
+            list="rel-note-titles"
+            value={relTarget}
+            onChange={e => setRelTarget(e.target.value)}
+          />
+          <div className="flex gap-1.5">
+            <button
+              className="flex-1 border border-border bg-transparent text-xs text-foreground"
+              style={{ borderRadius: 4, padding: '4px 0' }}
+              onClick={handleAdd}
+              disabled={!relKey.trim() || !relTarget.trim()}
+            >
+              Add
+            </button>
+            <button
+              className="border border-border bg-transparent text-xs text-muted-foreground"
+              style={{ borderRadius: 4, padding: '4px 8px' }}
+              onClick={() => { setShowForm(false); setRelKey(''); setRelTarget('') }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button
+          className="mt-2 w-full border border-border bg-transparent text-center text-muted-foreground"
+          style={{ borderRadius: 6, padding: '6px 12px', fontSize: 12, opacity: onAddProperty ? 1 : 0.5, cursor: onAddProperty ? 'pointer' : 'not-allowed' }}
+          disabled={!onAddProperty}
+          onClick={() => { setShowForm(true); setTimeout(() => keyInputRef.current?.focus(), 0) }}
+        >
+          + Link existing
+        </button>
+      )}
     </div>
   )
 }
@@ -322,7 +396,7 @@ export function Inspector({
                 onAddProperty={onAddProperty ? handleAddProperty : undefined}
                 onNavigate={onNavigate}
               />
-              <DynamicRelationshipsPanel frontmatter={frontmatter} entries={entries} onNavigate={onNavigate} />
+              <DynamicRelationshipsPanel frontmatter={frontmatter} entries={entries} onNavigate={onNavigate} onAddProperty={onAddProperty ? handleAddProperty : undefined} />
               <BacklinksPanel backlinks={backlinks} onNavigate={onNavigate} />
               <GitHistoryPanel commits={gitHistory} />
             </>
