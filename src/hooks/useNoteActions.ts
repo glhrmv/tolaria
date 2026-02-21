@@ -213,7 +213,7 @@ export function useNoteActions(
       path, filename: `${slug}.md`, title, isA: type,
       aliases: [], belongsTo: [], relatedTo: [],
       status: noStatusTypes.has(type) ? null : 'Active',
-      owner: null, cadence: null, modifiedAt: now, createdAt: now, fileSize: 0,
+      owner: null, cadence: null, archived: false, modifiedAt: now, createdAt: now, fileSize: 0,
       snippet: '', relationships: {}, icon: null, color: null,
     }
 
@@ -240,7 +240,7 @@ export function useNoteActions(
     const newEntry: VaultEntry = {
       path, filename: `${slug}.md`, title: typeName, isA: 'Type',
       aliases: [], belongsTo: [], relatedTo: [],
-      status: null, owner: null, cadence: null,
+      status: null, owner: null, cadence: null, archived: false,
       modifiedAt: now, createdAt: now, fileSize: 0,
       snippet: '', relationships: {}, icon: null, color: null,
     }

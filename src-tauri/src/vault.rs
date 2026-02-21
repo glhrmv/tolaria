@@ -24,6 +24,7 @@ pub struct VaultEntry {
     pub status: Option<String>,
     pub owner: Option<String>,
     pub cadence: Option<String>,
+    pub archived: bool,
     #[serde(rename = "modifiedAt")]
     pub modified_at: Option<u64>,
     #[serde(rename = "createdAt")]
@@ -57,6 +58,8 @@ struct Frontmatter {
     owner: Option<String>,
     #[serde(rename = "Cadence")]
     cadence: Option<String>,
+    #[serde(rename = "Archived")]
+    archived: Option<bool>,
     #[serde(rename = "Created at")]
     created_at: Option<String>,
     #[serde(rename = "Created time")]
@@ -210,7 +213,7 @@ fn parse_frontmatter(data: &HashMap<String, serde_json::Value>) -> Frontmatter {
 /// Known non-relationship frontmatter keys to skip (case-insensitive comparison).
 /// Only skip keys that can never contain wikilinks.
 const SKIP_KEYS: &[&str] = &[
-    "is a", "aliases", "status", "cadence", "created at", "created time",
+    "is a", "aliases", "status", "cadence", "archived", "created at", "created time",
     "icon", "color",
 ];
 
@@ -360,6 +363,7 @@ pub fn parse_md_file(path: &Path) -> Result<VaultEntry, String> {
         status: frontmatter.status,
         owner: frontmatter.owner,
         cadence: frontmatter.cadence,
+        archived: frontmatter.archived.unwrap_or(false),
         modified_at, created_at, file_size,
         icon: frontmatter.icon,
         color: frontmatter.color,
