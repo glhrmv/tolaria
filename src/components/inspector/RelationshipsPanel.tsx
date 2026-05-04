@@ -444,7 +444,7 @@ function InlineAddNote({ entries, vaultPath, locale, onAdd, onCreateAndOpenNote 
 function RelationshipGroup({ label, refs, entries, typeEntryMap, vaultPath, locale, onNavigate, onEnterNeighborhood, onRemoveRef, onAddRef, onCreateAndOpenNote }: {
   label: string; refs: string[]; entries: VaultEntry[]; typeEntryMap: Record<string, VaultEntry>; vaultPath: string
   onNavigate: (target: string) => void
-  onEnterNeighborhood?: (title: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
   onRemoveRef?: (ref: string) => void
   onAddRef?: (ref: string) => void
   onCreateAndOpenNote?: (title: string) => Promise<boolean>
@@ -461,7 +461,8 @@ function RelationshipGroup({ label, refs, entries, typeEntryMap, vaultPath, loca
               key={`${ref}-${idx}`}
               {...props}
               onClick={(e) => {
-                if (onEnterNeighborhood && (e.metaKey || e.ctrlKey)) onEnterNeighborhood(props.target)
+                const target = resolveEntry(entries, props.target)
+                if (onEnterNeighborhood && target && (e.metaKey || e.ctrlKey)) onEnterNeighborhood(target)
                 else onNavigate(props.target)
               }}
               onRemove={onRemoveRef ? () => onRemoveRef(ref) : undefined}
@@ -815,7 +816,7 @@ function SuggestedRelationshipSlot({ label, entries, vaultPath, locale, onAdd, o
 export function DynamicRelationshipsPanel({ entry, frontmatter, entries, typeEntryMap, vaultPath, onNavigate, onEnterNeighborhood, onAddProperty, onUpdateProperty, onDeleteProperty, onCreateAndOpenNote, locale = 'en' }: {
   entry?: VaultEntry; frontmatter: ParsedFrontmatter; entries: VaultEntry[]; typeEntryMap: Record<string, VaultEntry>; vaultPath?: string
   onNavigate: (target: string) => void
-  onEnterNeighborhood?: (title: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
   onAddProperty?: (key: string, value: FrontmatterValue) => void
   onUpdateProperty?: (key: string, value: FrontmatterValue) => void
   onDeleteProperty?: (key: string) => void

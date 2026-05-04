@@ -452,7 +452,7 @@ export function DynamicPropertiesPanel({
   onDeleteProperty?: (key: string) => void
   onAddProperty?: (key: string, value: FrontmatterValue) => void
   onNavigate?: (target: string) => void
-  onEnterNeighborhood?: (title: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
   onCreateMissingType?: (typeName: string) => boolean | void | Promise<boolean | void>
   locale?: AppLocale
 }) {
@@ -484,6 +484,14 @@ export function DynamicPropertiesPanel({
 
   useFocusNoteIconProperty({ onAddProperty, setEditingKey, setPendingSuggestedKey })
 
+  const handleEnterTypeNeighborhood = useMemo(() => {
+    if (!onEnterNeighborhood) return undefined
+    return (typeName: string) => {
+      const found = entries?.find((candidate) => candidate.isA === 'Type' && candidate.title.toLowerCase() === typeName.toLowerCase())
+      if (found) onEnterNeighborhood(found)
+    }
+  }, [onEnterNeighborhood, entries])
+
   return (
     <div className="flex flex-col gap-3">
       <div className="grid min-w-0 gap-x-2 gap-y-1.5" style={PROPERTY_PANEL_GRID_STYLE}>
@@ -495,7 +503,7 @@ export function DynamicPropertiesPanel({
           typeIconKeys={typeIconKeys}
           onUpdateProperty={onUpdateProperty}
           onNavigate={onNavigate}
-          onEnterNeighborhood={onEnterNeighborhood}
+          onEnterNeighborhood={handleEnterTypeNeighborhood}
           missingTypeName={missingTypeName}
           onCreateMissingType={onCreateMissingType}
           locale={locale}

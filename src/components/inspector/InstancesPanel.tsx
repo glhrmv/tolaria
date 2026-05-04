@@ -12,7 +12,7 @@ export function InstancesPanel({ entry, entries, typeEntryMap, onNavigate, onEnt
   entries: VaultEntry[]
   typeEntryMap: Record<string, VaultEntry>
   onNavigate: (target: string) => void
-  onEnterNeighborhood?: (title: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
 }) {
   const instances = useMemo(() => {
     if (entry.isA !== 'Type') return []
@@ -42,7 +42,7 @@ export function InstancesPanel({ entry, entries, typeEntryMap, onNavigate, onEnt
               typeColor={getTypeColor(e.isA, te?.color)}
               isArchived={e.archived}
               onClick={(ev) => {
-                if (onEnterNeighborhood && (ev.metaKey || ev.ctrlKey)) onEnterNeighborhood(e.title)
+                if (onEnterNeighborhood && (ev.metaKey || ev.ctrlKey)) onEnterNeighborhood(e)
                 else onNavigate(e.title)
               }}
               title={entryStatusTitle(e)}

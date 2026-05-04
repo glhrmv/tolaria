@@ -18,7 +18,7 @@ export function ReferencedByPanel({ items, typeEntryMap, onNavigate, onEnterNeig
   items: ReferencedByItem[]
   typeEntryMap: Record<string, VaultEntry>
   onNavigate: (target: string) => void
-  onEnterNeighborhood?: (title: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
 }) {
   const grouped = useMemo(() => {
     const map = new Map<string, { entriesByPath: Map<string, VaultEntry>; inverseKeys: Set<string> }>()
@@ -71,7 +71,7 @@ export function ReferencedByPanel({ items, typeEntryMap, onNavigate, onEnterNeig
                       typeColor={getTypeColor(e.isA, te?.color)}
                       isArchived={e.archived}
                       onClick={(ev) => {
-                        if (onEnterNeighborhood && (ev.metaKey || ev.ctrlKey)) onEnterNeighborhood(e.title)
+                        if (onEnterNeighborhood && (ev.metaKey || ev.ctrlKey)) onEnterNeighborhood(e)
                         else onNavigate(e.title)
                       }}
                       title={e.archived ? 'Archived' : undefined}

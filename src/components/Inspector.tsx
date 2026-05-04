@@ -29,7 +29,7 @@ interface InspectorProps {
   gitHistory: GitCommit[]
   vaultPath?: string
   onNavigate: (target: string) => void
-  onEnterNeighborhood?: (title: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
   onViewCommitDiff?: (commitHash: string) => void
   onUpdateFrontmatter?: (path: string, key: string, value: FrontmatterValue) => Promise<void>
   onDeleteProperty?: (path: string, key: string) => Promise<void>
@@ -76,7 +76,7 @@ function ValidFrontmatterPanels({
   vaultPath?: string
   referencedBy: ReferencedByItem[]
   onNavigate: (target: string) => void
-  onEnterNeighborhood?: (title: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
   onCreateAndOpenNote?: (title: string) => Promise<boolean>
   onUpdateProperty?: (key: string, value: FrontmatterValue) => void
   onDeleteProperty?: (key: string) => void
@@ -146,7 +146,7 @@ function PrimaryInspectorPanel({
   vaultPath?: string
   referencedBy: ReferencedByItem[]
   onNavigate: (target: string) => void
-  onEnterNeighborhood?: (title: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
   onToggleRawEditor?: () => void
   onInitializeProperties?: (path: string) => void
   onCreateAndOpenNote?: (title: string) => Promise<boolean>
