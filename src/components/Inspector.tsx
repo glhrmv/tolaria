@@ -29,6 +29,7 @@ interface InspectorProps {
   gitHistory: GitCommit[]
   vaultPath?: string
   onNavigate: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
   onViewCommitDiff?: (commitHash: string) => void
   onUpdateFrontmatter?: (path: string, key: string, value: FrontmatterValue) => Promise<void>
   onDeleteProperty?: (path: string, key: string) => Promise<void>
@@ -60,6 +61,7 @@ function ValidFrontmatterPanels({
   vaultPath,
   referencedBy,
   onNavigate,
+  onEnterNeighborhood,
   onCreateAndOpenNote,
   onUpdateProperty,
   onDeleteProperty,
@@ -74,6 +76,7 @@ function ValidFrontmatterPanels({
   vaultPath?: string
   referencedBy: ReferencedByItem[]
   onNavigate: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
   onCreateAndOpenNote?: (title: string) => Promise<boolean>
   onUpdateProperty?: (key: string, value: FrontmatterValue) => void
   onDeleteProperty?: (key: string) => void
@@ -91,6 +94,7 @@ function ValidFrontmatterPanels({
         onDeleteProperty={onDeleteProperty}
         onAddProperty={onAddProperty}
         onNavigate={onNavigate}
+        onEnterNeighborhood={onEnterNeighborhood}
         onCreateMissingType={onCreateMissingType}
         locale={locale}
       />
@@ -102,14 +106,15 @@ function ValidFrontmatterPanels({
         typeEntryMap={typeEntryMap}
         vaultPath={vaultPath}
         onNavigate={onNavigate}
+        onEnterNeighborhood={onEnterNeighborhood}
         onAddProperty={onAddProperty}
         onUpdateProperty={onUpdateProperty}
         onDeleteProperty={onDeleteProperty}
         onCreateAndOpenNote={onCreateAndOpenNote}
         locale={locale}
       />
-      <InstancesPanel entry={entry} entries={entries} typeEntryMap={typeEntryMap} onNavigate={onNavigate} />
-      <ReferencedByPanel items={referencedBy} typeEntryMap={typeEntryMap} onNavigate={onNavigate} />
+      <InstancesPanel entry={entry} entries={entries} typeEntryMap={typeEntryMap} onNavigate={onNavigate} onEnterNeighborhood={onEnterNeighborhood} />
+      <ReferencedByPanel items={referencedBy} typeEntryMap={typeEntryMap} onNavigate={onNavigate} onEnterNeighborhood={onEnterNeighborhood} />
     </>
   )
 }
@@ -123,6 +128,7 @@ function PrimaryInspectorPanel({
   vaultPath,
   referencedBy,
   onNavigate,
+  onEnterNeighborhood,
   onToggleRawEditor,
   onInitializeProperties,
   onCreateAndOpenNote,
@@ -140,6 +146,7 @@ function PrimaryInspectorPanel({
   vaultPath?: string
   referencedBy: ReferencedByItem[]
   onNavigate: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
   onToggleRawEditor?: () => void
   onInitializeProperties?: (path: string) => void
   onCreateAndOpenNote?: (title: string) => Promise<boolean>
@@ -159,6 +166,7 @@ function PrimaryInspectorPanel({
         vaultPath={vaultPath}
         referencedBy={referencedBy}
         onNavigate={onNavigate}
+        onEnterNeighborhood={onEnterNeighborhood}
         onCreateAndOpenNote={onCreateAndOpenNote}
         onUpdateProperty={onUpdateProperty}
         onDeleteProperty={onDeleteProperty}
@@ -183,6 +191,7 @@ function InspectorBody({
   gitHistory,
   vaultPath,
   onNavigate,
+  onEnterNeighborhood,
   onViewCommitDiff,
   onUpdateFrontmatter,
   onDeleteProperty,
@@ -227,6 +236,7 @@ function InspectorBody({
           vaultPath={vaultPath}
           referencedBy={referencedBy}
           onNavigate={onNavigate}
+          onEnterNeighborhood={onEnterNeighborhood}
           onToggleRawEditor={onToggleRawEditor}
           onInitializeProperties={onInitializeProperties}
           onCreateAndOpenNote={onCreateAndOpenNote}
@@ -238,7 +248,7 @@ function InspectorBody({
         />
       )}
       {backlinks.length > 0 && <Separator />}
-      <BacklinksPanel backlinks={backlinks} onNavigate={onNavigate} />
+      <BacklinksPanel backlinks={backlinks} onNavigate={onNavigate} onEnterNeighborhood={onEnterNeighborhood} />
       <Separator />
       <NoteInfoPanel entry={entry} content={content} locale={locale} />
       {gitHistory.length > 0 && <Separator />}

@@ -7,11 +7,12 @@ import { entryStatusTitle } from './shared'
 
 const MAX_DISPLAY = 50
 
-export function InstancesPanel({ entry, entries, typeEntryMap, onNavigate }: {
+export function InstancesPanel({ entry, entries, typeEntryMap, onNavigate, onEnterNeighborhood }: {
   entry: VaultEntry
   entries: VaultEntry[]
   typeEntryMap: Record<string, VaultEntry>
   onNavigate: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
 }) {
   const instances = useMemo(() => {
     if (entry.isA !== 'Type') return []
@@ -40,7 +41,10 @@ export function InstancesPanel({ entry, entries, typeEntryMap, onNavigate }: {
               noteIcon={e.icon}
               typeColor={getTypeColor(e.isA, te?.color)}
               isArchived={e.archived}
-              onClick={() => onNavigate(e.title)}
+              onClick={(ev) => {
+                if (onEnterNeighborhood && (ev.metaKey || ev.ctrlKey)) onEnterNeighborhood(e.title)
+                else onNavigate(e.title)
+              }}
               title={entryStatusTitle(e)}
               TypeIcon={getTypeIcon(e.isA, te?.icon)}
             />

@@ -47,6 +47,8 @@ interface EditorProps {
   isVaultLoading?: boolean
   entries: VaultEntry[]
   onNavigateWikilink: (target: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
+  onEnterNeighborhoodByTitle?: (title: string) => void
   onUnsupportedAiPaste?: (message: string) => void
   onLoadDiff?: (path: string) => Promise<string>
   onLoadDiffAtCommit?: (path: string, commitHash: string) => Promise<string>
@@ -368,6 +370,8 @@ function EditorLayout({
   inspectorCollapsed,
   onToggleInspector,
   onNavigateWikilink,
+  onEnterNeighborhood,
+  onEnterNeighborhoodByTitle,
   handleEditorChange,
   onToggleFavorite,
   onToggleOrganized,
@@ -435,6 +439,8 @@ function EditorLayout({
   inspectorCollapsed: boolean
   onToggleInspector: () => void
   onNavigateWikilink: (target: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
+  onEnterNeighborhoodByTitle?: (title: string) => void
   handleEditorChange: () => void
   onToggleFavorite?: (path: string) => void
   onToggleOrganized?: (path: string) => void
@@ -532,6 +538,7 @@ function EditorLayout({
               findRequest={findRequest}
               rawLatestContentRef={rawLatestContentRef}
               onRenameFilename={onRenameFilename}
+              onEnterNeighborhood={onEnterNeighborhood}
               noteWidth={noteWidth}
               onToggleNoteWidth={onToggleNoteWidth}
               isConflicted={isConflicted}
@@ -571,6 +578,7 @@ function EditorLayout({
           onCreateAndOpenNote={onCreateAndOpenNote}
           onInitializeProperties={onInitializeProperties}
           onToggleRawEditor={handleToggleRawExclusive}
+          onEnterNeighborhoodByTitle={onEnterNeighborhoodByTitle}
           onOpenNote={onNavigateWikilink}
           onFileCreated={onFileCreated}
           onFileModified={onFileModified}

@@ -37,6 +37,7 @@ type BreadcrumbActions = Pick<
   | 'onArchiveNote'
   | 'onUnarchiveNote'
   | 'onRenameFilename'
+  | 'onEnterNeighborhood'
   | 'noteWidth'
   | 'onToggleNoteWidth'
 >
@@ -201,6 +202,7 @@ function ActiveTabBreadcrumb({
       onArchive={bindPath(actions.onArchiveNote, path)}
       onUnarchive={bindPath(actions.onUnarchiveNote, path)}
       onRenameFilename={actions.onRenameFilename}
+      onEnterNeighborhood={actions.onEnterNeighborhood}
       noteWidth={actions.noteWidth}
       onToggleNoteWidth={actions.onToggleNoteWidth}
       locale={locale}
@@ -265,6 +267,7 @@ function buildBreadcrumbActions(model: EditorContentModel): BreadcrumbActions {
     onArchiveNote: model.onArchiveNote,
     onUnarchiveNote: model.onUnarchiveNote,
     onRenameFilename: model.onRenameFilename,
+    onEnterNeighborhood: model.onEnterNeighborhood,
     noteWidth: model.noteWidth,
     onToggleNoteWidth: model.onToggleNoteWidth,
   }

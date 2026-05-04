@@ -41,6 +41,7 @@ interface EditorRightPanelProps {
   onCreateAndOpenNote?: (title: string) => Promise<boolean>
   onInitializeProperties?: (path: string) => void
   onToggleRawEditor?: () => void
+  onEnterNeighborhoodByTitle?: (title: string) => void
   onOpenNote?: (path: string) => void
   onFileCreated?: (relativePath: string) => void
   onFileModified?: (relativePath: string) => void
@@ -56,7 +57,7 @@ export function EditorRightPanel({
   inspectorEntry, inspectorContent, entries, gitHistory, vaultPath,
   noteList, noteListFilter,
   onToggleInspector, onToggleAIChat, onToggleTableOfContents, onNavigateWikilink, onViewCommitDiff,
-  onUpdateFrontmatter, onDeleteProperty, onAddProperty, onCreateMissingType, onCreateAndOpenNote, onInitializeProperties, onToggleRawEditor, onOpenNote,
+  onUpdateFrontmatter, onDeleteProperty, onAddProperty, onCreateMissingType, onCreateAndOpenNote, onInitializeProperties, onToggleRawEditor, onEnterNeighborhoodByTitle, onOpenNote,
   onFileCreated, onFileModified, onVaultChanged,
   locale,
 }: EditorRightPanelProps) {
@@ -103,6 +104,7 @@ export function EditorRightPanel({
           gitHistory={gitHistory}
           vaultPath={vaultPath}
           onNavigate={onNavigateWikilink}
+          onEnterNeighborhood={onEnterNeighborhoodByTitle}
           onViewCommitDiff={onViewCommitDiff}
           onUpdateFrontmatter={onUpdateFrontmatter}
           onDeleteProperty={onDeleteProperty}

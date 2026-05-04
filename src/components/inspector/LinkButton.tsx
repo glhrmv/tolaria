@@ -1,4 +1,4 @@
-import type { ComponentType, SVGAttributes } from 'react'
+import type { ComponentType, MouseEvent, SVGAttributes } from 'react'
 import { X } from '@phosphor-icons/react'
 import { NoteTitleIcon } from '../NoteTitleIcon'
 
@@ -13,7 +13,7 @@ export function LinkButton({ label, noteIcon, typeColor, bgColor, isArchived, on
   typeColor: string
   bgColor?: string
   isArchived: boolean
-  onClick: () => void
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void
   onRemove?: () => void
   title?: string
   TypeIcon: ComponentType<SVGAttributes<SVGSVGElement>>
@@ -28,7 +28,7 @@ export function LinkButton({ label, noteIcon, typeColor, bgColor, isArchived, on
         color, borderRadius: 6, padding: bgColor ? '6px 10px' : '4px 0',
         fontSize: 12, fontWeight: 500, opacity: isDimmed ? 0.7 : 1,
       }}
-      onClick={onClick}
+      onClick={(e) => onClick(e)}
       title={title}
     >
       <span className="flex items-center gap-1 flex-1 truncate">

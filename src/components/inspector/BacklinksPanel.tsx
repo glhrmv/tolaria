@@ -9,16 +9,20 @@ export interface BacklinkItem {
   context: string | null
 }
 
-function BacklinkEntry({ entry, context, onNavigate }: {
+function BacklinkEntry({ entry, context, onNavigate, onEnterNeighborhood }: {
   entry: VaultEntry
   context: string | null
   onNavigate: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
 }) {
   const isDimmed = entry.archived
   return (
     <button
       className="flex w-full cursor-pointer flex-col items-start gap-0.5 border-none bg-transparent p-0 text-left hover:underline"
-      onClick={() => onNavigate(entry.title)}
+      onClick={(e) => {
+        if (onEnterNeighborhood && (e.metaKey || e.ctrlKey)) onEnterNeighborhood(entry.title)
+        else onNavigate(entry.title)
+      }}
       title={entryStatusTitle(entry)}
     >
       <span
@@ -38,9 +42,10 @@ function BacklinkEntry({ entry, context, onNavigate }: {
   )
 }
 
-export function BacklinksPanel({ backlinks, onNavigate }: {
+export function BacklinksPanel({ backlinks, onNavigate, onEnterNeighborhood }: {
   backlinks: BacklinkItem[]
   onNavigate: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
 }) {
   if (backlinks.length === 0) return null
 
@@ -57,6 +62,7 @@ export function BacklinksPanel({ backlinks, onNavigate }: {
             entry={entry}
             context={context}
             onNavigate={onNavigate}
+            onEnterNeighborhood={onEnterNeighborhood}
           />
         ))}
       </div>

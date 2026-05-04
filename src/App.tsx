@@ -112,6 +112,7 @@ import { extractDeletedContentFromDiff } from './components/note-list/noteListUt
 import { isActiveVaultUnavailableError } from './utils/vaultErrors'
 import { hasNoteIconValue } from './utils/noteIcon'
 import { filenameStemToTitle } from './utils/noteTitle'
+import { resolveEntry } from './utils/wikilink'
 import {
   focusNoteListContainer,
   isEditableElement,
@@ -378,6 +379,10 @@ function App() {
 
   const vault = useVaultLoader(noteWindowParams ? '' : resolvedPath)
   const runtimeMissingVaultPath = !noteWindowParams ? vault.unavailableVaultPath : null
+  const handleEnterNeighborhoodByTitle = useCallback((target: string) => {
+    const entry = resolveEntry(vault.entries, target)
+    if (entry) handleEnterNeighborhood(entry)
+  }, [vault.entries, handleEnterNeighborhood])
   const {
     markInternalWrite: markRecentVaultWrite,
     filterExternalPaths: filterExternalVaultPaths,
@@ -1717,6 +1722,8 @@ function App() {
               isVaultLoading={isVaultContentLoading}
               entries={noteWindowParams && activeTab ? [activeTab.entry] : vault.entries}
               onNavigateWikilink={notes.handleNavigateWikilink}
+              onEnterNeighborhood={handleEnterNeighborhood}
+              onEnterNeighborhoodByTitle={handleEnterNeighborhoodByTitle}
               onLoadDiff={vault.loadDiff}
               onLoadDiffAtCommit={vault.loadDiffAtCommit}
               pendingCommitDiffRequest={pendingDiffRequest}

@@ -441,7 +441,7 @@ function SuggestedPropertyRows({
 
 export function DynamicPropertiesPanel({
   entry, frontmatter, entries,
-  onUpdateProperty, onDeleteProperty, onAddProperty, onNavigate, onCreateMissingType,
+  onUpdateProperty, onDeleteProperty, onAddProperty, onNavigate, onEnterNeighborhood, onCreateMissingType,
   locale = 'en',
 }: {
   entry: VaultEntry
@@ -452,6 +452,7 @@ export function DynamicPropertiesPanel({
   onDeleteProperty?: (key: string) => void
   onAddProperty?: (key: string, value: FrontmatterValue) => void
   onNavigate?: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
   onCreateMissingType?: (typeName: string) => boolean | void | Promise<boolean | void>
   locale?: AppLocale
 }) {
@@ -494,6 +495,7 @@ export function DynamicPropertiesPanel({
           typeIconKeys={typeIconKeys}
           onUpdateProperty={onUpdateProperty}
           onNavigate={onNavigate}
+          onEnterNeighborhood={onEnterNeighborhood}
           missingTypeName={missingTypeName}
           onCreateMissingType={onCreateMissingType}
           locale={locale}

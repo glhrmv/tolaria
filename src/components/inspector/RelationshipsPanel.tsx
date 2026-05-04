@@ -441,9 +441,10 @@ function InlineAddNote({ entries, vaultPath, locale, onAdd, onCreateAndOpenNote 
   )
 }
 
-function RelationshipGroup({ label, refs, entries, typeEntryMap, vaultPath, locale, onNavigate, onRemoveRef, onAddRef, onCreateAndOpenNote }: {
+function RelationshipGroup({ label, refs, entries, typeEntryMap, vaultPath, locale, onNavigate, onEnterNeighborhood, onRemoveRef, onAddRef, onCreateAndOpenNote }: {
   label: string; refs: string[]; entries: VaultEntry[]; typeEntryMap: Record<string, VaultEntry>; vaultPath: string
   onNavigate: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
   onRemoveRef?: (ref: string) => void
   onAddRef?: (ref: string) => void
   onCreateAndOpenNote?: (title: string) => Promise<boolean>
@@ -459,7 +460,10 @@ function RelationshipGroup({ label, refs, entries, typeEntryMap, vaultPath, loca
             <LinkButton
               key={`${ref}-${idx}`}
               {...props}
-              onClick={() => onNavigate(props.target)}
+              onClick={(e) => {
+                if (onEnterNeighborhood && (e.metaKey || e.ctrlKey)) onEnterNeighborhood(props.target)
+                else onNavigate(props.target)
+              }}
               onRemove={onRemoveRef ? () => onRemoveRef(ref) : undefined}
             />
           )
@@ -808,9 +812,10 @@ function SuggestedRelationshipSlot({ label, entries, vaultPath, locale, onAdd, o
   )
 }
 
-export function DynamicRelationshipsPanel({ entry, frontmatter, entries, typeEntryMap, vaultPath, onNavigate, onAddProperty, onUpdateProperty, onDeleteProperty, onCreateAndOpenNote, locale = 'en' }: {
+export function DynamicRelationshipsPanel({ entry, frontmatter, entries, typeEntryMap, vaultPath, onNavigate, onEnterNeighborhood, onAddProperty, onUpdateProperty, onDeleteProperty, onCreateAndOpenNote, locale = 'en' }: {
   entry?: VaultEntry; frontmatter: ParsedFrontmatter; entries: VaultEntry[]; typeEntryMap: Record<string, VaultEntry>; vaultPath?: string
   onNavigate: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
   onAddProperty?: (key: string, value: FrontmatterValue) => void
   onUpdateProperty?: (key: string, value: FrontmatterValue) => void
   onDeleteProperty?: (key: string) => void
@@ -839,7 +844,7 @@ export function DynamicRelationshipsPanel({ entry, frontmatter, entries, typeEnt
     <div className={RELATIONSHIPS_PANEL_GRID_CLASS_NAME} style={PROPERTY_PANEL_GRID_STYLE} data-testid="relationships-panel-grid">
       {relationshipEntries.map(({ key, refs }) => (
         <RelationshipGroup
-          key={key} label={key} refs={refs} entries={entries} typeEntryMap={typeEntryMap} vaultPath={resolvedVaultPath} onNavigate={onNavigate}
+          key={key} label={key} refs={refs} entries={entries} typeEntryMap={typeEntryMap} vaultPath={resolvedVaultPath} onNavigate={onNavigate} onEnterNeighborhood={onEnterNeighborhood}
           onRemoveRef={canEdit ? (ref) => handleRemoveRef(key, ref) : undefined}
           onAddRef={canEdit ? (ref) => handleAddRef(key, ref) : undefined}
           onCreateAndOpenNote={canEdit ? onCreateAndOpenNote : undefined}

@@ -189,6 +189,7 @@ function ReadOnlyType({
   isA,
   customColorKey,
   onNavigate,
+  onEnterNeighborhood,
   missingTypeName,
   locale,
   onCreateMissingType,
@@ -196,6 +197,7 @@ function ReadOnlyType({
   isA?: string | null
   customColorKey?: string | null
   onNavigate?: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
   missingTypeName?: string | null
   locale: AppLocale
   onCreateMissingType?: (typeName: string) => boolean | void | Promise<boolean | void>
@@ -218,7 +220,10 @@ function ReadOnlyType({
               display: 'inline-flex',
               alignItems: 'center',
             }}
-            onClick={() => onNavigate(isA.toLowerCase())} title={isA}
+            onClick={(e) => {
+              if (onEnterNeighborhood && (e.metaKey || e.ctrlKey)) onEnterNeighborhood(isA.toLowerCase())
+              else onNavigate(isA.toLowerCase())
+            }} title={isA}
           >{isA}</button>
         ) : (
           <span className="text-[12px] text-secondary-foreground">{isA}</span>
@@ -236,6 +241,7 @@ interface TypeSelectorProps {
   typeIconKeys: Record<string, string | null>
   onUpdateProperty?: (key: string, value: FrontmatterValue) => void
   onNavigate?: (target: string) => void
+  onEnterNeighborhood?: (title: string) => void
   missingTypeName?: string | null
   onCreateMissingType?: (typeName: string) => boolean | void | Promise<boolean | void>
   locale?: AppLocale
@@ -248,6 +254,7 @@ export function TypeSelector({ onUpdateProperty, ...props }: TypeSelectorProps) 
         isA={props.isA}
         customColorKey={props.customColorKey}
         onNavigate={props.onNavigate}
+        onEnterNeighborhood={props.onEnterNeighborhood}
         missingTypeName={props.missingTypeName}
         locale={props.locale ?? 'en'}
         onCreateMissingType={props.onCreateMissingType}

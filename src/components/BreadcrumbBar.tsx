@@ -59,6 +59,7 @@ interface BreadcrumbBarProps {
   onArchive?: () => void
   onUnarchive?: () => void
   onRenameFilename?: (path: string, newFilenameStem: string) => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
   noteWidth?: NoteWidthMode
   onToggleNoteWidth?: () => void
   /** Ref for direct DOM manipulation — avoids re-render on scroll. */
@@ -656,13 +657,17 @@ function FilenameInput({
 }
 
 function FilenameTrigger({
+  entry,
   filenameStem,
   locale = 'en',
   onStartEditing,
+  onEnterNeighborhood,
 }: {
+  entry: VaultEntry
   filenameStem: string
   locale?: AppLocale
   onStartEditing: () => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
 }) {
   const handleKeyDown = useCallback((event: KeyboardEvent<HTMLButtonElement>) => {
     if (event.key !== 'Enter') return
@@ -670,12 +675,20 @@ function FilenameTrigger({
     onStartEditing()
   }, [onStartEditing])
 
+  const handleClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    if (onEnterNeighborhood && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault()
+      onEnterNeighborhood(entry)
+    }
+  }, [onEnterNeighborhood, entry])
+
   return (
     <Button
       type="button"
       variant="ghost"
       size="xs"
       className="h-auto min-w-0 gap-1 px-0 py-0 text-sm font-medium text-foreground hover:bg-transparent hover:text-foreground"
+      onClick={handleClick}
       onDoubleClick={onStartEditing}
       onKeyDown={handleKeyDown}
       data-testid="breadcrumb-filename-trigger"
@@ -722,6 +735,7 @@ function FilenameDisplay({
   locale,
   onRenameFilename,
   onStartEditing,
+  onEnterNeighborhood,
 }: {
   entry: VaultEntry
   filenameStem: string
@@ -729,16 +743,17 @@ function FilenameDisplay({
   locale?: AppLocale
   onRenameFilename?: (path: string, newFilenameStem: string) => void
   onStartEditing: () => void
+  onEnterNeighborhood?: (entry: VaultEntry) => void
 }) {
   return (
     <div className="flex min-w-0 items-center gap-1">
-      <FilenameTrigger filenameStem={filenameStem} locale={locale} onStartEditing={onStartEditing} />
+      <FilenameTrigger entry={entry} filenameStem={filenameStem} locale={locale} onStartEditing={onStartEditing} onEnterNeighborhood={onEnterNeighborhood} />
       <SyncFilenameButton entryPath={entry.path} syncStem={syncStem} locale={locale} onRenameFilename={onRenameFilename} />
     </div>
   )
 }
 
-function FilenameCrumb({ entry, locale = 'en', onRenameFilename }: Pick<BreadcrumbBarProps, 'entry' | 'locale' | 'onRenameFilename'>) {
+function FilenameCrumb({ entry, locale = 'en', onRenameFilename, onEnterNeighborhood }: Pick<BreadcrumbBarProps, 'entry' | 'locale' | 'onRenameFilename' | 'onEnterNeighborhood'>) {
   const filenameStem = useMemo(() => entry.filename.replace(/\.md$/, ''), [entry.filename])
   const syncStem = useMemo(() => deriveSyncStem(entry), [entry])
   const [isEditing, setIsEditing] = useState(false)
@@ -790,6 +805,7 @@ function FilenameCrumb({ entry, locale = 'en', onRenameFilename }: Pick<Breadcru
       locale={locale}
       onRenameFilename={onRenameFilename}
       onStartEditing={startEditing}
+      onEnterNeighborhood={onEnterNeighborhood}
     />
   )
 }
@@ -994,7 +1010,8 @@ function BreadcrumbTitle({
   locale,
   loadingTitle,
   onRenameFilename,
-}: Pick<BreadcrumbBarProps, 'entry' | 'locale' | 'loadingTitle' | 'onRenameFilename'>) {
+  onEnterNeighborhood,
+}: Pick<BreadcrumbBarProps, 'entry' | 'locale' | 'loadingTitle' | 'onRenameFilename' | 'onEnterNeighborhood'>) {
   const typeLabel = entry.isA ?? 'Note'
   return (
     <div className="breadcrumb-bar__title-content flex items-center gap-1.5 min-w-0 text-sm text-muted-foreground">
@@ -1003,7 +1020,7 @@ function BreadcrumbTitle({
       <div className="flex min-w-0 items-center gap-1 truncate">
         {loadingTitle
           ? <BreadcrumbTitleSkeleton />
-          : <FilenameCrumb entry={entry} locale={locale} onRenameFilename={onRenameFilename} />}
+          : <FilenameCrumb entry={entry} locale={locale} onRenameFilename={onRenameFilename} onEnterNeighborhood={onEnterNeighborhood} />}
       </div>
     </div>
   )
@@ -1015,6 +1032,7 @@ export const BreadcrumbBar = memo(function BreadcrumbBar({
   locale = 'en',
   loadingTitle = false,
   onRenameFilename,
+  onEnterNeighborhood,
   ...actionProps
 }: BreadcrumbBarProps) {
   const { onMouseDown } = useDragRegion()
@@ -1043,6 +1061,7 @@ export const BreadcrumbBar = memo(function BreadcrumbBar({
             locale={locale}
             loadingTitle={loadingTitle}
             onRenameFilename={onRenameFilename}
+            onEnterNeighborhood={onEnterNeighborhood}
           />
         </div>
         <div
