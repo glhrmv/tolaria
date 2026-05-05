@@ -325,6 +325,72 @@ describe('DynamicPropertiesPanel', () => {
     expect(onNavigate).toHaveBeenCalledWith('project')
   })
 
+  describe('Type chip — neighborhood navigation', () => {
+    const projectTypeEntry = makeEntry({ path: '/vault/project.md', title: 'Project', isA: 'Type' })
+
+    it('Cmd-click on the Type chip resolves the Type entry and calls onEnterNeighborhood', () => {
+      const onEnterNeighborhood = vi.fn()
+      render(
+        <TooltipProvider>
+          <DynamicPropertiesPanel
+            entry={makeEntry({ isA: 'Project' })}
+            entries={[projectTypeEntry]}
+            content=""
+            frontmatter={{}}
+            onNavigate={onNavigate}
+            onEnterNeighborhood={onEnterNeighborhood}
+          />
+        </TooltipProvider>,
+      )
+
+      fireEvent.click(screen.getByText('Project'), { metaKey: true })
+
+      expect(onEnterNeighborhood).toHaveBeenCalledWith(projectTypeEntry)
+      expect(onNavigate).not.toHaveBeenCalled()
+    })
+
+    it('regular click on the Type chip navigates instead of entering neighborhood', () => {
+      const onEnterNeighborhood = vi.fn()
+      render(
+        <TooltipProvider>
+          <DynamicPropertiesPanel
+            entry={makeEntry({ isA: 'Project' })}
+            entries={[projectTypeEntry]}
+            content=""
+            frontmatter={{}}
+            onNavigate={onNavigate}
+            onEnterNeighborhood={onEnterNeighborhood}
+          />
+        </TooltipProvider>,
+      )
+
+      fireEvent.click(screen.getByText('Project'))
+
+      expect(onNavigate).toHaveBeenCalledWith('project')
+      expect(onEnterNeighborhood).not.toHaveBeenCalled()
+    })
+
+    it('Cmd-click is a no-op when no matching Type entry exists', () => {
+      const onEnterNeighborhood = vi.fn()
+      render(
+        <TooltipProvider>
+          <DynamicPropertiesPanel
+            entry={makeEntry({ isA: 'Unknown' })}
+            entries={[projectTypeEntry]}
+            content=""
+            frontmatter={{}}
+            onNavigate={onNavigate}
+            onEnterNeighborhood={onEnterNeighborhood}
+          />
+        </TooltipProvider>,
+      )
+
+      fireEvent.click(screen.getByText('Unknown'), { metaKey: true })
+
+      expect(onEnterNeighborhood).not.toHaveBeenCalled()
+    })
+  })
+
   describe('TypeSelector', () => {
     const typeEntries = [
       makeEntry({ path: '/vault/project.md', title: 'Project', isA: 'Type' }),

@@ -369,6 +369,53 @@ describe('BreadcrumbBar — action buttons always right-aligned', () => {
   })
 })
 
+describe('BreadcrumbBar — neighborhood navigation', () => {
+  it('Cmd-click on the filename trigger calls onEnterNeighborhood with the entry', () => {
+    const onEnterNeighborhood = vi.fn()
+    render(
+      <BreadcrumbBar
+        entry={baseEntry}
+        {...defaultProps}
+        onEnterNeighborhood={onEnterNeighborhood}
+      />,
+    )
+
+    fireEvent.click(screen.getByTestId('breadcrumb-filename-trigger'), { metaKey: true })
+
+    expect(onEnterNeighborhood).toHaveBeenCalledWith(baseEntry)
+  })
+
+  it('Ctrl-click on the filename trigger calls onEnterNeighborhood with the entry', () => {
+    const onEnterNeighborhood = vi.fn()
+    render(
+      <BreadcrumbBar
+        entry={baseEntry}
+        {...defaultProps}
+        onEnterNeighborhood={onEnterNeighborhood}
+      />,
+    )
+
+    fireEvent.click(screen.getByTestId('breadcrumb-filename-trigger'), { ctrlKey: true })
+
+    expect(onEnterNeighborhood).toHaveBeenCalledWith(baseEntry)
+  })
+
+  it('regular click on the filename trigger does not call onEnterNeighborhood', () => {
+    const onEnterNeighborhood = vi.fn()
+    render(
+      <BreadcrumbBar
+        entry={baseEntry}
+        {...defaultProps}
+        onEnterNeighborhood={onEnterNeighborhood}
+      />,
+    )
+
+    fireEvent.click(screen.getByTestId('breadcrumb-filename-trigger'))
+
+    expect(onEnterNeighborhood).not.toHaveBeenCalled()
+  })
+})
+
 describe('BreadcrumbBar — raw editor toggle', () => {
   it('shows Raw editor button with tooltip "Raw editor" when rawMode is off', () => {
     const onToggleRaw = vi.fn()
